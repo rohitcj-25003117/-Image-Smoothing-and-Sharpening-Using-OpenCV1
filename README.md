@@ -1,4 +1,4 @@
-#EX06-Image-Smoothing-and-Sharpening-Using-OpenCV1
+#EX05-Image-Smoothing-and-Sharpening-Using-OpenCV1
 #Aim
 #NAME : CJ ROHIT
 REG : 212224243005
