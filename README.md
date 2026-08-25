@@ -1,19 +1,17 @@
-#EX05-Image-Smoothing-and-Sharpening-Using-OpenCV1
-#Aim
-#NAME : CJ ROHIT
-REG : 212224243005
+EX 05 : Image Smoothing and Sharpening Using OpenCV
+Aim
 
-To write a Python program using OpenCV to apply different smoothing filters (Averaging, Weighted Averaging, Gaussian, Median) and sharpening filters (Laplacian Kernel and Laplacian Operator) for image enhancement, and display each result separately along with the original image for comparison.
+To write a Python program using OpenCV to apply different smoothing filters such as Averaging, Weighted Averaging, Gaussian, and Median filters, and sharpening techniques such as Laplacian Kernel and Laplacian Operator for image enhancement, and display each result separately along with the original image for comparison.
 
-The program performs the following operations:
+The Program Performs the Following Operations
 Read and display an input image
 Apply Averaging filter
 Apply Weighted Averaging filter
 Apply Gaussian filter
 Apply Median filter
-Apply Laplacian sharpening using kernel
+Apply Laplacian sharpening using a kernel
 Apply Laplacian operator
-Display all outputs for comparison
+Display all outputs separately for comparison
 Software Used
 Anaconda – Python 3.7
 Jupyter Notebook / VS Code
@@ -27,151 +25,173 @@ Import the required libraries: OpenCV, NumPy, and Matplotlib.
 
 Step 2:
 
-Read the input image saveetha.jpg.
+Read the input image using cv2.imread().
 
 Step 3:
 
-Convert the image from BGR to RGB format for display.
+Convert the image from BGR to RGB format for displaying using Matplotlib.
 
 Step 4:
 
-Apply Averaging Filter using cv2.filter2D().
+Apply the Averaging Filter using cv2.blur() with a suitable kernel size.
 
 Step 5:
 
-Apply Weighted Averaging Filter using a custom kernel with cv2.filter2D().
+Apply the Weighted Averaging Filter using a custom weighted kernel with cv2.filter2D().
 
 Step 6:
 
-Apply Gaussian Filter using cv2.GaussianBlur().
+Apply the Gaussian Filter using cv2.GaussianBlur() to reduce noise while preserving important edges.
 
 Step 7:
 
-Apply Median Filter using cv2.medianBlur().
+Apply the Median Filter using cv2.medianBlur() to remove salt-and-pepper noise.
 
 Step 8:
 
-Apply Laplacian Sharpening using Kernel with cv2.filter2D().
+Apply Laplacian sharpening using a sharpening kernel with cv2.filter2D() to enhance edges and fine details.
 
 Step 9:
 
-Apply Laplacian Operator using cv2.Laplacian().
+Convert the image into grayscale and apply the Laplacian Operator using cv2.Laplacian() to detect edges.
 
 Step 10:
 
-Display all filtered images separately for comparison.
+Display the original image and all filtered images separately using Matplotlib in a grid layout.
 
-Developed By
-Name: CJ ROHIT
-Register No: 212224243005
 Program
-```
-python
-1. Smoothing Filters
-i) Using Averaging Filter
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
-image1 = cv2.imread("saveetha.jpg")
+# Read the input image
+img = cv2.imread("image.jpg")
 
-image2 = cv2.cvtColor(
-    image1,
+# Check whether image is loaded successfully
+if img is None:
+    print("Error: Image not found!")
+    exit()
+
+# Convert BGR image to RGB for displaying
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# 1. Averaging Filter
+average = cv2.blur(img, (5, 5))
+average_rgb = cv2.cvtColor(average, cv2.COLOR_BGR2RGB)
+
+# 2. Weighted Averaging Filter
+kernel = np.array([[1, 2, 1],
+                   [2, 4, 2],
+                   [1, 2, 1]], dtype=np.float32) / 16
+
+weighted = cv2.filter2D(img, -1, kernel)
+weighted_rgb = cv2.cvtColor(weighted, cv2.COLOR_BGR2RGB)
+
+# 3. Gaussian Filter
+gaussian = cv2.GaussianBlur(img, (5, 5), 0)
+gaussian_rgb = cv2.cvtColor(gaussian, cv2.COLOR_BGR2RGB)
+
+# 4. Median Filter
+median = cv2.medianBlur(img, 5)
+median_rgb = cv2.cvtColor(median, cv2.COLOR_BGR2RGB)
+
+# 5. Laplacian Sharpening using Kernel
+laplacian_kernel = np.array([[0, -1, 0],
+                             [-1, 5, -1],
+                             [0, -1, 0]])
+
+laplacian_kernel_img = cv2.filter2D(
+    img, -1, laplacian_kernel
+)
+
+laplacian_kernel_rgb = cv2.cvtColor(
+    laplacian_kernel_img,
     cv2.COLOR_BGR2RGB
 )
 
-kernel = np.ones(
-    (11, 11),
-    np.float32
-) / 169
+# 6. Laplacian Operator
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-image3 = cv2.filter2D(
-    image2,
-    -1,
-    kernel
-)
-
-plt.figure(figsize=(9, 9))
-
-plt.subplot(1, 2, 1)
-plt.imshow(image2)
-plt.title("Original Image")
-plt.axis("off")
-
-plt.subplot(1, 2, 2)
-plt.imshow(image3)
-plt.title("Average Filter Image")
-plt.axis("off")
-
-plt.show()
-ii) Using Weighted Averaging Filter
-kernel1 = np.array([
-    [1, 2, 1],
-    [2, 4, 2],
-    [1, 2, 1]
-]) / 16
-
-image3 = cv2.filter2D(
-    image2,
-    -1,
-    kernel1
-)
-
-plt.imshow(image3)
-plt.title("Weighted Average Filter Image")
-plt.axis("off")
-plt.show()
-iii) Using Gaussian Filter
-gaussian_blur = cv2.GaussianBlur(
-    image2,
-    (33, 33),
-    0,
-    0
-)
-
-plt.imshow(gaussian_blur)
-plt.title("Gaussian Blur")
-plt.axis("off")
-plt.show()
-iv) Using Median Filter
-median = cv2.medianBlur(
-    image2,
-    13
-)
-
-plt.imshow(median)
-plt.title("Median Blur")
-plt.axis("off")
-plt.show()
-2. Sharpening Filters
-i) Using Laplacian Linear Kernel
-kernel2 = np.array([
-    [-1, -1, -1],
-    [2, -2, 1],
-    [2, 1, -1]
-])
-
-image3 = cv2.filter2D(
-    image2,
-    -1,
-    kernel2
-)
-
-plt.imshow(image3)
-plt.title("Laplacian Kernel")
-plt.axis("off")
-plt.show()
-ii) Using Laplacian Operator
 laplacian = cv2.Laplacian(
-    image2,
+    gray,
     cv2.CV_64F
 )
 
-plt.imshow(laplacian)
+laplacian = cv2.convertScaleAbs(laplacian)
+
+# Display all results
+plt.figure(figsize=(12, 10))
+
+# Original Image
+plt.subplot(3, 3, 1)
+plt.imshow(img_rgb)
+plt.title("Original Image")
+plt.axis("off")
+
+# Averaging Filter
+plt.subplot(3, 3, 2)
+plt.imshow(average_rgb)
+plt.title("Averaging Filter")
+plt.axis("off")
+
+# Weighted Averaging Filter
+plt.subplot(3, 3, 3)
+plt.imshow(weighted_rgb)
+plt.title("Weighted Averaging")
+plt.axis("off")
+
+# Gaussian Filter
+plt.subplot(3, 3, 4)
+plt.imshow(gaussian_rgb)
+plt.title("Gaussian Filter")
+plt.axis("off")
+
+# Median Filter
+plt.subplot(3, 3, 5)
+plt.imshow(median_rgb)
+plt.title("Median Filter")
+plt.axis("off")
+
+# Laplacian Kernel
+plt.subplot(3, 3, 6)
+plt.imshow(laplacian_kernel_rgb)
+plt.title("Laplacian Kernel")
+plt.axis("off")
+
+# Laplacian Operator
+plt.subplot(3, 3, 7)
+plt.imshow(laplacian, cmap="gray")
 plt.title("Laplacian Operator")
 plt.axis("off")
+
+plt.tight_layout()
 plt.show()
-```
+Developed By
+Name: CJ ROHIT
+Register No:212224243005
+Output
+Smoothing Filters
+
+1. Averaging Filter:
+Produces a blurred image by averaging the pixel values within a specified neighborhood.
+
+2. Weighted Averaging Filter:
+Gives different weights to neighboring pixels and produces a smoother image while preserving important details better than simple averaging.
+
+3. Gaussian Filter:
+Reduces image noise and produces a smooth result while preserving important edges better than simple averaging.
+
+4. Median Filter:
+Effectively removes salt-and-pepper noise by replacing each pixel with the median value of its neighboring pixels.
+
+Sharpening Filters
+
+5. Laplacian Kernel:
+Enhances edges and fine details in the image using a sharpening kernel.
+
+6. Laplacian Operator:
+Detects edges and fine intensity changes in the grayscale image.
+
 outpt:
 <img width="406" height="664" alt="image" src="https://github.com/user-attachments/assets/223f310a-5478-4958-b80f-760b2faee2a1" />
 
